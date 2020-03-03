@@ -2,6 +2,8 @@ package dev.solar.level1;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class NumberOfKTest {
@@ -14,5 +16,15 @@ class NumberOfKTest {
         int[] expected = {5, 6, 3};
         int[] actual = numberOfK.solution(array, commands);
         assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    void test2() {
+        int[] array = {5, 6, 3};
+        int[] ints = Arrays.copyOfRange(array, 0, 3);
+        Arrays.sort(ints);
+        for (int i = 0; i < ints.length; i++) {
+            System.out.println(ints[i]);
+        }
     }
 }
