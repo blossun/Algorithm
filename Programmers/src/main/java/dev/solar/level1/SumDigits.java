@@ -10,3 +10,5 @@ public class SumDigits {
         return answer;
     }
 }
+/*
+* 숫자를 String으로 변환 후, 한자리씩 split한 뒤, 해당 값을 Integer로 변환하여 합을 구한다.*/

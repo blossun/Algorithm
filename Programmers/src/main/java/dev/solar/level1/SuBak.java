@@ -17,3 +17,5 @@ public class SuBak {
         return answer;
     }
 }
+/*
+* 입력받은 n만큼 for문을 돌면서 0과 짝수 자리에 더해질 문자와 홀수 자리에 더해질 문자를 분기문으로 나눠서 문자열 생성*/
