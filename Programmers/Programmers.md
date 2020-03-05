@@ -29,8 +29,8 @@
     2중 for문 → 1중 for문, 변수 줄이기
 
 * [자연수 뒤집어 배열로 만들기](https://programmers.co.kr/learn/courses/30/lessons/12932) - [코드](./src/test/java/dev/solar/level1/NaturalNumberInversionArrayTest.java)
-* 
-
+* [약수의 합](https://programmers.co.kr/learn/courses/30/lessons/12928) - [코드](./src/main/java/dev/solar/level1/SumOfDivisors.java)
+* [나누어 떨어지는 숫자 배열](https://programmers.co.kr/learn/courses/30/lessons/12910) - [코드](./src/test/java/dev/solar/level1/DivisiorArrayTest.java)
 ---
 
 ## TODO LIST
