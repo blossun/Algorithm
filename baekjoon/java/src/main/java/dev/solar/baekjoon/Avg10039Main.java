@@ -16,6 +16,7 @@ public class Avg10039Main {
 
         result = avg.solv(scores);
         System.out.println(result);
+        br.close(); //닫아줘야함
     }
 }
 
