@@ -14,31 +14,30 @@ public class Star2446Main {
 
 class Star2446Solv {
     void star2446solv(int count) throws IOException {
-//        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         int x;
         for (int i = 0; i < count; i++) {
             for (int j = 0; j < i; j++) { //공백찍기
-//                bw.write(" ");
-                System.out.print(" ");
+                bw.write(" ");
             }
             x = (count - i) * 2 - 1;
             for (int j = 0; j < x; j++) { //별찍기
-//                bw.write("*");
-                System.out.print("*");
+                bw.write("*");
             }
-//            bw.write("\n");
-            System.out.println();
+            bw.write("\n");
         }
         for (int i = 1; i < count; i++) {
             x = count - (i + 1);
             for (int j = 0; j < x; j++) { //공백찍기
-                System.out.print(" ");
+                bw.write(" ");
             }
             x = (i + 1) * 2 - 1;
             for (int j = 0; j < x; j++) { //별찍기
-                System.out.print("*");
+                bw.write("*");
             }
-            System.out.println();
+            bw.write("\n");
         }
+        bw.flush();
+        bw.close();
     }
 }
