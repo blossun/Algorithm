@@ -1,13 +1,11 @@
 package dev.solar.baekjoon;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,6 +25,7 @@ class Star2446SolvTest {
         System.setOut(originalOut);
     }
 
+    @DisplayName("정확성")
     @Test
     void test1() throws IOException {
         solv.star2446solv(5);
@@ -40,5 +39,23 @@ class Star2446SolvTest {
                         " *******\n" +
                         "*********\n";
         assertEquals(expected, outContent.toString());
+    }
+
+    @DisplayName("시간 제한 - 1초")
+    @Test
+    void timeout() {
+        assertTimeout(Duration.ofMillis(1000), () -> solv.star2446solv(5)); //1000 ms = 1s
+    }
+
+    @DisplayName("시간 제한 - 0.5초")
+    @Test
+    void timeout2() {
+        assertTimeout(Duration.ofMillis(500), () -> solv.star2446solv(5)); //1000 ms = 1s
+    }
+
+    @DisplayName("시간 제한 - 0.2초")
+    @Test
+    void timeout3() {
+        assertTimeout(Duration.ofMillis(200), () -> solv.star2446solv(5)); //1000 ms = 1s
     }
 }
