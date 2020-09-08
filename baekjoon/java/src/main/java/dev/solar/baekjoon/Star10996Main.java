@@ -33,7 +33,7 @@ class Star10996Solv {
             }
             bw.write("\n");
         }
-        bw.flush();;
+        bw.flush();
         bw.close();
     }
 }
