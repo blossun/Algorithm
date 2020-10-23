@@ -1,14 +1,13 @@
 package dev.solar.baekjoon;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class N10828 {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         MyStack myStack = new MyStack();
         int n = Integer.parseInt(br.readLine());
         for (int i = 0; i < n; i++) {
@@ -18,23 +17,25 @@ public class N10828 {
                 myStack.push(Integer.parseInt(cmdLine[1]));
             } else if (cmd.equals("top")) {
                 if (!myStack.empty()) {
-                    System.out.println(myStack.top());
+                    bw.write(myStack.top() + "\n");
                 } else {
-                    System.out.println("-1");
+                    bw.write("-1" + "\n");
                 }
             } else if (cmd.equals("size")) {
-                System.out.println(myStack.size());
+                bw.write(myStack.size() + "\n");
             } else if (cmd.equals("pop")) {
                 if (!myStack.empty()) {
-                    System.out.println(myStack.pop());
+                    bw.write(myStack.pop() + "\n");
                 } else {
-                    System.out.println("-1");
+                    bw.write("-1" + "\n");
                 }
             } else if (cmd.equals("empty")) {
-                System.out.println(myStack.empty() ? "1" : "0");
+                bw.write(myStack.empty() ? "1" : "0" + "\n");
             }
         }
-
+        bw.flush();
+        bw.close();
+        br.close();
     }
 
     static class MyStack {
