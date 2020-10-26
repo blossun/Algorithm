@@ -41,15 +41,15 @@ public class N18258 {
     static class MyQueue {
         // 원형큐 구현
         // head, tail의 시작은 0으로
-        int mx = 3;
-        int[] queue = new int[mx];
+        int max = 2000000; //이걸 늘려주니깐 통과함....  이걸 쓸거면 원형 큐 쓰는 의미가 없는 거 아닌가?
+        int[] queue = new int[max];
         int head, tail = 0;
 
         public void push(int x) {
             if (full()) {
                 return ;
             }
-            tail = (tail + 1) % mx;
+            tail = (tail + 1) % max;
             queue[tail] = x;
         }
 
@@ -57,7 +57,7 @@ public class N18258 {
             if (empty()) {
                 return -1;
             }
-            head = (head + 1) % mx;
+            head = (head + 1) % max;
             return queue[head];
         }
 
@@ -72,11 +72,11 @@ public class N18258 {
 
         // 큐가 꽉 찼는지 확인
         public boolean full() {
-            return (tail + 1) % mx == head;
+            return (tail + 1) % max == head;
         }
 
         public int front() {
-            return empty() ? -1 : queue[(head + 1) % mx];
+            return empty() ? -1 : queue[(head + 1) % max];
         }
 
         public int back() {
