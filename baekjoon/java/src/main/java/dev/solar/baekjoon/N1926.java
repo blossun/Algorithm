@@ -1,7 +1,5 @@
 package dev.solar.baekjoon;
 
-import com.sun.tools.javac.util.Pair;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -51,30 +49,37 @@ public class N1926 {
                 if (board[i][j] == 0 || visit[i][j]) continue;
                 // (i, j)는 새로운 그림에 속해있는 시작점
                 count++; // 그림의 수 1 증가
-                Queue<Point> q = new LinkedList<>(); //큐에 (x,y)좌표 pair 타입 데이터 저장
-                // (i, j)를 BFS의 시작점으로 출발하기 위한 준비
-                // 방문 표시를 큐에 넣을 때 해줌!!!!
-                // (뺄 때 표시 no -> 같은 칸이 큐에 여러 번 들어가서 시간 초과나 메모리 초과 발생할 수 있음)
-                visit[i][j] = true; // 시작점을 방문했다고 표시
-                q.add(new Point(i, j));
-                int area = 0; //현재 그림의 넒이
-                while (!q.isEmpty()) {
-                    area++; //큐에 들어있는 원소를 하나 뺄 때 마다 넓이를 1 증가시킴
-                    Point cur = q.poll();
-                    for (int dir = 0; dir < 4; dir++) { //현재 좌표의 상하좌우 칸을 살펴봄
-                        int nx = cur.x + dx[dir];
-                        int ny = cur.y + dy[dir];
-                        if (nx < 0 || nx >= N || ny < 0 || ny >= M) continue; // 범위 밖일 경우 넘어감
-                        if (visit[nx][ny] || board[nx][ny] != 1) continue; // 이미 방문한 칸이거나 파란 칸이 아닐 경우
-                        visit[nx][ny] = true; //(nx, ny)를 방문했다고 명시
-                        q.add(new Point(nx, ny));
-                    }
-                }
+                int area = getArea(new Point(i, j));
                 maxWidth = Math.max(maxWidth, area); // area가 mx보다 클 경우 mx에 area를 대입.
             }
         }
         System.out.println(count);
         System.out.println(maxWidth);
+    }
+
+    private static int getArea(Point index) {
+        Queue<Point> q = new LinkedList<>(); //큐에 (x,y)좌표 pair 타입 데이터 저장
+        int area = 0; //현재 그림의 넒이
+
+        // (i, j)를 BFS의 시작점으로 출발하기 위한 준비
+        // 방문 표시를 큐에 넣을 때 해줌!!!!
+        // (뺄 때 표시 no -> 같은 칸이 큐에 여러 번 들어가서 시간 초과나 메모리 초과 발생할 수 있음)
+        visit[index.x][index.y] = true; // 시작점을 방문했다고 표시
+        q.add(new Point(index.x, index.y));
+        while (!q.isEmpty()) {
+            Point cur = q.poll();
+            area++; //큐에 들어있는 원소를 하나 뺄 때 마다 넓이를 1 증가시킴
+
+            for (int dir = 0; dir < 4; dir++) { //현재 좌표의 상하좌우 칸을 살펴봄
+                int x = cur.x + dx[dir];
+                int y = cur.y + dy[dir];
+                if (x < 0 || x >= N || y < 0 || y >= M) continue; // 범위 밖일 경우 넘어감
+                if (visit[x][y] || board[x][y] != 1) continue; // 이미 방문한 칸이거나 파란 칸이 아닐 경우
+                visit[x][y] = true; //(nx, ny)를 방문했다고 명시
+                q.add(new Point(x, y));
+            }
+        }
+        return area;
     }
 }
 
