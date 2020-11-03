@@ -11,6 +11,7 @@ public class N7562 {
     static int[] dx = {-2, -2, -1, -1, 1, 1, 2, 2};
     static int[] dy = {-1, 1, -2, 2, -2, 2, -1, 1};
     static int L; //체스판 길이
+    static int startX, startY, endX, endY;
 
     static class Point {
         int x;
@@ -22,20 +23,7 @@ public class N7562 {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int testCase = Integer.parseInt(br.readLine().trim());
-        for (int i = 0; i < testCase; i++) {
-            L = Integer.parseInt(br.readLine().trim());
-            disit = new int[L][L];
-
-            String[] XY = br.readLine().split(" ");
-            int startX = Integer.parseInt(XY[0]);
-            int startY = Integer.parseInt(XY[1]);
-            XY = br.readLine().split(" ");
-            int endX = Integer.parseInt(XY[0]);
-            int endY = Integer.parseInt(XY[1]);
-
+    public static void dfs() {
             Queue<Point> q = new LinkedList<>();
             q.add(new Point(startX, startY));
             disit[startX][startY] = 1;
@@ -44,7 +32,7 @@ public class N7562 {
                 Point cur = q.poll();
 
                 // 목표 지점에 도달했으면 끝
-                if (cur.x == endX && cur.y == endY) break;
+                if (cur.x == endX && cur.y == endY) return ;
 
                 //한 지점에서 다음 지점으로 이동할 수 있는 좌표의 갯수는 8가지
                 for (int dir = 0; dir < 8; dir++) {
@@ -56,8 +44,29 @@ public class N7562 {
                     q.add(new Point(x, y));
                 }
             }
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int testCase = Integer.parseInt(br.readLine().trim());
+        for (int i = 0; i < testCase; i++) {
+            L = Integer.parseInt(br.readLine().trim());
+            disit = new int[L][L];
+
+            String[] XY = br.readLine().split(" ");
+            startX = Integer.parseInt(XY[0]);
+            startY = Integer.parseInt(XY[1]);
+            XY = br.readLine().split(" ");
+            endX = Integer.parseInt(XY[0]);
+            endY = Integer.parseInt(XY[1]);
+
+            disit[startX][startY] = 1;
+            dfs();
 
             System.out.println(disit[endX][endY] - 1);
+            // 방문하지 않은 좌표를 -1로 초기화하지 않고, 0으로 사용하는 대신
+            // 처음 시작 위치 이동 횟수를 1부터 시작해서 탐색 진행
+            // 총 이동횟수 출력시 -1을 해주도록 구현
         }
     }
 }
