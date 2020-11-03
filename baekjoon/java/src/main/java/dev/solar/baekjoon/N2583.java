@@ -22,6 +22,19 @@ public class N2583 {
             this.y = y;
         }
     }
+    
+    public static int DFS(Point cur, int width) { //시작 width
+        // 큐는 필요 없이 재귀로 구현 -> 종료 조건 필수
+        draw[cur.x][cur.y] = 1;
+        for (int dir = 0; dir < 4; dir++) {
+            int x = cur.x + dx[dir];
+            int y = cur.y + dy[dir];
+            if (x < 0 || x >= X || y < 0 || y >= Y) continue;
+            if (board[x][y] != 0 || draw[x][y] > 0) continue;
+            width = DFS(new Point(x, y), ++width); //주의! 선 +1 후 넘겨야함
+        }
+        return width;
+    }
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -47,6 +60,7 @@ public class N2583 {
             }
         }
 
+//        System.out.println("board ============>");
 //        for (int y = 0; y < Y; y++) {
 //            for (int x = 0; x < X; x++) {
 //                System.out.print(board[x][y]);
@@ -55,7 +69,6 @@ public class N2583 {
 //        }
 
         // 영역 구하기
-        Queue<Point> q = new LinkedList<>();
         int count = 0; //영역의 수
         int width;
         List<Integer> widths = new ArrayList<>(); //영역의 넓이
@@ -64,26 +77,11 @@ public class N2583 {
             for (int yi = 0; yi < Y; yi++) {
                 if (board[xi][yi] != 0 || draw[xi][yi] > 0) continue; //board에서 0인 부분을 체크해야함
                 count++; //새로운 영역 갯수 증가
-                width = 1; //영역의 넓이는 1부터 시작
-                q.add(new Point(xi, yi));
-
-                while(!q.isEmpty()) {
-                    Point cur = q.poll();
-                    draw[cur.x][cur.y] = 1;
-                    for (int dir = 0; dir < 4; dir++) {
-                        int x = cur.x + dx[dir];
-                        int y = cur.y + dy[dir];
-                        if (x < 0 || x >= X || y < 0 || y >= Y) continue;
-                        if (board[x][y] != 0 || draw[x][y] > 0) continue;
-                        q.add(new Point(x, y));
-                        draw[x][y] = draw[cur.x][cur.y] + 1;
-                        width++;
-                    }
-                }
-                widths.add(width);
+                widths.add(DFS(new Point(xi, yi), 1)); //영역의 넓이는 1부터 시작
             }
         }
 
+//        System.out.println("draw ============>");
 //        for (int y = 0; y < Y; y++) {
 //            for (int x = 0; x < X; x++) {
 //                System.out.print(draw[x][y]);
@@ -91,11 +89,13 @@ public class N2583 {
 //            System.out.println();
 //        }
 
-        System.out.println(count);
+        StringBuilder sb = new StringBuilder();
+        sb.append(count + "\n");
         Collections.sort(widths);
         for (Integer w : widths) {
-            System.out.printf("%d ", w);
+            sb.append(w + " ");
         }
+        System.out.println(sb);
     }
 }
 /*
