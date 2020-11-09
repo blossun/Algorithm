@@ -14,21 +14,20 @@ public class N17478 {
     static String endingAnswerStr = "\"재귀함수는 자기 자신을 호출하는 함수라네\"\n";
     static String endingStr = "라고 답변하였지.\n";
     static BufferedWriter bw;
-    static int N;
 
     public static void main(String[] args) throws IOException {
         Scanner sc = new Scanner(System.in);
         bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        N = sc.nextInt();
+        int N = sc.nextInt();
         bw.write(preStr);
-        recursiveQNA(N);
+        recursiveQNA(N, 0);
         bw.flush();
         bw.close();
     }
 
-    static void recursiveQNA(int n) throws IOException {
+    static void recursiveQNA(int n, int level) throws IOException {
         StringBuilder underStr = new StringBuilder();
-        for (int i = 1; i <= 4 * (N - n); i++) {
+        for (int i = 0; i < 4 * level; i++) {
             underStr.append('_');
         }
 
@@ -44,7 +43,7 @@ public class N17478 {
         bw.write(underStr + answerStr2);
         bw.write(underStr + answerStr3);
 
-        recursiveQNA(n - 1);
+        recursiveQNA(n - 1, level + 1);
         bw.write(underStr + endingStr);
     }
 }
