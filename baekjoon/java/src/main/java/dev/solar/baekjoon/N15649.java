@@ -1,35 +1,33 @@
 package dev.solar.baekjoon;
 
-import java.io.BufferedWriter;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.util.Scanner;
+import java.io.InputStreamReader;
 
 public class N15649 {
     static int N; //1~N 까지의 자연수
     static int M; //길이가 M인 수열
     static int[] arr = new int[10]; //수열을 담을 배열 //M의 최대 입력값이 8임
     static boolean[] isused = new boolean[10]; //특정 수가 쓰였는지를 true 혹은 false로 나타내는 배열
-    static BufferedWriter bw;
+    static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
-        Scanner sc = new Scanner(System.in);
-        bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        N = sc.nextInt();
-        M = sc.nextInt();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String line = br.readLine();
+        N = line.charAt(0) - '0';
+        M = line.charAt(2) - '0';
         sequence(0);
-        bw.flush();
-        bw.close();
+        System.out.println(sb);
     }
 
     private static void sequence(int k) throws IOException { // K : 현재 k개까지 수를 택함.
         //Base Condition
         if (k == M) { //M개를 다 뽑았으면 출력
             for (int i = 0; i < M; i++) {
-                bw.write(arr[i] + " ");
+                sb.append(arr[i]).append(" ");
             }
-            bw.write('\n');
-            return ;
+            sb.append("\n");
+            return;
         }
 
         for (int i = 1; i <= N; i++) { //범위! 1 ~ N(N 포함) 까지의 수에서 차례로 뽑음
