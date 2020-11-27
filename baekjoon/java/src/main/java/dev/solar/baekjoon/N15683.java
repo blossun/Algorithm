@@ -8,7 +8,7 @@ import java.util.*;
 public class N15683 {
     //BFS
     static int[][] board; //cctv, 벽을 입력받고, 이후 감시영역을 추가 - 0: 사각지대, !0 : 사각지대 외
-    static int[][] board2; //bfs 돌리려고 전역으로 선언
+    static int[][] board2; //bfs 돌리려고 전역으로 선언. 여기서 각 상황별 감시 영역을 저장
     static int[][] visit; //사각지대 영역을 탐색
     static int[] dx = {0, 0, 1, -1};
     static int[] dy = {1, -1, 0, 0};
@@ -72,24 +72,12 @@ public class N15683 {
                 }
             }
         }
-        //cctv 객수 = M개를 뽑아내는 수열
+
         M = cctvs.size();
-        cctvArr = new int[M];
-        sequence(0);
-        // board 출력
-//        for (int x = 0; x < X; x++) {
-//            for (int y = 0; y < Y; y++) {
-//                System.out.print(board[x][y]);
-//            }
-//            System.out.println();
-//        }
-
-//        for (Integer blindSpotArea : blindSpotAreas) {
-//            System.out.print(blindSpotArea + " ");
-//        }
-        System.out.println(Collections.min(blindSpotAreas));
+        cctvArr = new int[M]; //cctv 객수 = M개를 뽑아내는 수열
         // cctv 감시 영역으로 나올 수 있는 경우의 수 - 순열 구하기
-
+        sequence(0);
+        System.out.println(Collections.min(blindSpotAreas));
     }
 
     private static void storeCCTV(int num, Point location) {
@@ -139,15 +127,6 @@ public class N15683 {
             board2 = draw(board2, cctv, cctvArr[i]); //해당 cctv랑, cctv 방향정보를 넘김
         }
 
-        // board2가 잘 그려졌는지 확인
-//        System.out.println("======= board2 =========");
-//        for (int x = 0; x < X; x++) {
-//            for (int y = 0; y < Y; y++) {
-//                System.out.print(board2[x][y] + " ");
-//            }
-//            System.out.println();
-//        }
-
         // 감시 영역이 채워진 board에서 사각지대 구하기
         // 방문여부 표시 배열을 초기화 해줘야함
         for (int x = 0; x < X; x++) {
@@ -184,14 +163,6 @@ public class N15683 {
         }
         return blindArea;
     }
-
-//    private static int bfs(int blindArea, int startX, int startY) {
-//        visit[startX][startY] = blindArea;
-//        q.add(new Point(startX, startY));
-//        blindArea++;
-//
-//        return blindArea;
-//    }
 
     private static int[][] draw(int[][] board2, Cctv cctv, int dir) {
         int[] ints = cctv.cctvArea[dir]; //바라보는 방향이 담겨있음
