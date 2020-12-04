@@ -50,7 +50,6 @@ public class N15683 {
         }
 
         int numberOdCases = 1 << (2 * cctvs.size()); // 4^(cctv수) 만큼의 경우의 수
-        System.out.println("numberOfCases : " + numberOdCases);
         for (int tmp = 0; tmp < numberOdCases; tmp++) {
             board2 = new int[X][Y];
             // 2차원 배열의 깊은 복사!!!
@@ -66,7 +65,6 @@ public class N15683 {
                 // i번째 cctv의 좌표를 기준으로 cctv 종류를 파악해서 감시구역 표시
                 int x = cctvs.get(i).x;
                 int y = cctvs.get(i).y;
-                System.out.println("[x, y] : " + x + ", " + y + ", cctv : " + board[x][y]);
                 if (board[x][y] == 1) {
                     upd(x, y, dir);
                 } else if (board[x][y] == 2) {
@@ -94,23 +92,13 @@ public class N15683 {
                 }
             }
             blindArea =Math.min(blindArea, val);
-            // board2 출력
-            System.out.println("================================");
-            for (int i = 0; i < X; i++) {
-                for (int j = 0; j < Y; j++) {
-                    System.out.print(board2[i][j]);
-                }
-                System.out.println();
-            }
         }
         System.out.println(blindArea);
     }
 
     // (x,y)에서 dir 방향으로 진행하면서 벽을 만날 때 까지 지나치는 모든 빈칸을 7로 바꿔버림
     private static void upd(int x, int y, int dir) {
-        System.out.print("dir : " + dir + " -> ");
         dir %= 4; //넘겨받은 dir은 0 ~ 6이 넘어올 수 있으므로 4방향으로 구분
-        System.out.println(dir);
         while (true) {
             x += dx[dir];
             y += dy[dir];
