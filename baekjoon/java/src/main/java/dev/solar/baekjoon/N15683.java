@@ -7,41 +7,15 @@ import java.util.*;
 
 public class N15683 {
     //BFS
-    static int[][] board; //cctv, 벽을 입력받고, 이후 감시영역을 추가 - 0: 사각지대, !0 : 사각지대 외
-    static int[][] board2; //bfs 돌리려고 전역으로 선언. 여기서 각 상황별 감시 영역을 저장
-    static int[][] visit; //사각지대 영역을 탐색
-    static int[] dx = {0, 0, 1, -1};
-    static int[] dy = {1, -1, 0, 0};
+    static int[][] board; //최초에 입력받은 board를 저장할 변수 - 사무실 모양 저장
+    static int[][] board2; //사각 지대의 개수를 세기 위해 사용할 변수 - cctv 방향이 정해졌을 떄 감시영역 표시
+    //남-동-북-서 주의!!! 나머지값으로 방향을 돌려줄 것이기 때문에 순서가 맞아야 한다.
+    // ex) 북-남-서-동 이런 순서이면 안 됨
+    static int[] dx = {1, 0, -1, 0};
+    static int[] dy = {0, 1, 0, -1};
     static int X;
     static int Y;
-
-    //백트래킹
-    static int N = 4;
-    static int M;
-    static int[] cctvArr; //cctv 방향별로 나올 수 있는 순열 조합
-    static List<Integer> blindSpotAreas = new ArrayList<>(); //상황별 사각지대 영역
-
-    // 순서대로, cctv를 4방향으로 돌렸을 때 cctv의 감시방향
-    // 백트래킹으로 각 cctv별 동서남북 뱡향들의 순열을 알아냄
-    // 자연수 N(0~3, 사방) 수에서 M(cctv 갯수)개를 고른 수열
-    static int[][] cctv1 = {{0}, {1}, {2}, {3}};
-    static int[][] cctv2 = {{0, 1}, {2, 3}, {0, 1}, {2, 3}};
-    static int[][] cctv3 = {{0, 3}, {0, 2}, {1, 2}, {1, 3}};
-    static int[][] cctv4 = {{0, 1, 3}, {0, 1, 2}, {0, 2, 3}, {1, 2, 3}};
-    static int[][] cctv5 = {{0, 1, 2, 3}, {0, 1, 2, 3}, {0, 1, 2, 3}, {0, 1, 2, 3}};
-    static List<Cctv> cctvs = new ArrayList<>();
-
-    static class Cctv {
-        int id;
-        Point location;
-        int[][] cctvArea;
-
-        public Cctv(int id, Point location, int[][] cctvArea) {
-            this.id = id;
-            this.location = location;
-            this.cctvArea = cctvArea;
-        }
-    }
+    static List<Point> cctvs = new ArrayList<>(); // cctv의 좌표를 저장할 변수
 
     static class Point {
         int x;
@@ -59,7 +33,7 @@ public class N15683 {
         X = Integer.parseInt(st.nextToken());
         Y = Integer.parseInt(st.nextToken());
         board = new int[X][Y];
-        visit = new int[X][Y];
+        int blindArea = 0; // 사각 지대의 최소 크기 (답)
 
         // cctv, 벽 입력 받기
         for (int x = 0; x < X; x++) {
@@ -67,127 +41,88 @@ public class N15683 {
             for (int y = 0; y < Y; y++) {
                 int p = Integer.parseInt(st.nextToken());
                 board[x][y] = p;
-                if (isCCTV(p)) { //cctv 인 경우 cctvs 리스트에 저장
-                    storeCCTV(p, new Point(x, y));
+                if (1 <= p && p <= 5) { //cctv 인 경우 cctvs 리스트에 저장
+                    cctvs.add(new Point(x, y));
                 }
+                if (p == 0)
+                    blindArea++;
             }
         }
 
-        M = cctvs.size();
-        cctvArr = new int[M]; //cctv 객수 = M개를 뽑아내는 수열
-        // cctv 감시 영역으로 나올 수 있는 경우의 수 - 순열 구하기
-        sequence(0);
-        System.out.println(Collections.min(blindSpotAreas));
-    }
+        int numberOdCases = 1 << (2 * cctvs.size()); // 4^(cctv수) 만큼의 경우의 수
+        System.out.println("numberOfCases : " + numberOdCases);
+        for (int tmp = 0; tmp < numberOdCases; tmp++) {
+            board2 = new int[X][Y];
+            // 2차원 배열의 깊은 복사!!!
+            for (int x = 0; x < board2.length; x++) {
+                System.arraycopy(board[x], 0, board2[x], 0, Y);
+            }
 
-    private static void storeCCTV(int num, Point location) {
-        switch (num) {
-            case 1 :
-                cctvs.add(new Cctv(1, location, cctv1));
-                break;
-            case 2 :
-                cctvs.add(new Cctv(2, location, cctv2));
-                break;
-            case 3 :
-                cctvs.add(new Cctv(3, location, cctv3));
-                break;
-            case 4 :
-                cctvs.add(new Cctv(4, location, cctv4));
-                break;
-            case 5 :
-                cctvs.add(new Cctv(5, location, cctv5));
-                break;
-        }
-    }
-
-    private static void sequence(int k) {
-        if (k == M) { //M개의 cctv 모두 방향이 정해졌다면
-            blindSpotAreas.add(getBlindArea(cctvArr)); //해당 상황에서 사각지대 영역을 구해서 저장
-            return ;
-        }
-
-        for (int i = 0; i < N; i++) {
-            cctvArr[k] = i;
-            sequence(k + 1);
-        }
-    }
-
-    private static int getBlindArea(int[] cctvArr) { //cctv 방향이 정해진 배열을 넘겨받음
-        // 감시 영역 채우기
-        //            board2 = board.clone(); //제대로된 복사가 이루어지지 않음
-        board2 = new int[X][Y]; //여기서 초기화하고 새로 만들어줘야함
-        // 2차원 배열의 깊은 복사!!!
-        for (int x = 0; x < board2.length; x++) {
-            System.arraycopy(board[x], 0, board2[x], 0, Y);
-        }
-
-        int cctvCount = cctvArr.length;
-        for (int i = 0; i < cctvCount; i++) { //각 cctv 별로 감시 영역 그리기
-            Cctv cctv = cctvs.get(i);
-            board2 = draw(board2, cctv, cctvArr[i]); //해당 cctv랑, cctv 방향정보를 넘김
-        }
-
-        // 감시 영역이 채워진 board에서 사각지대 구하기
-        // 방문여부 표시 배열을 초기화 해줘야함
-        for (int x = 0; x < X; x++) {
-            Arrays.fill(visit[x], 0);
-        }
-        Queue<Point> q = new LinkedList<>();
-        int blindArea = 0;
-        int width;
-
-        for (int xi = 0; xi < X; xi++) {
-            for (int yi = 0; yi < Y; yi++) {
-                if (board2[xi][yi] != 0 || visit[xi][yi] > 0) //board가 0이 아니거나 방문한 곳이면 skip
-                    continue;
-                q.add(new Point(xi, yi));
-                width = 1;
-
-                while (!q.isEmpty()) {
-                    Point cur = q.poll();
-                    visit[cur.x][cur.y] = 1;
-
-                    //네 빵향 탐색
-                    for (int dir = 0; dir < 4; dir++) {
-                        int x = cur.x + dx[dir];
-                        int y = cur.y + dy[dir];
-                        if (x < 0 || x >= X || y < 0 || y >= Y) continue; //범위를 벗어나면
-                        if (board2[x][y] != 0 || visit[x][y] > 0) continue; //0(사각지대)이 아니거나 방문한 곳이면
-                        q.add(new Point(x, y));
-                        visit[x][y] = visit[cur.x][cur.y] + 1;
-                        width++;
-                    }
+            int brute = tmp; // 0 ~ 63(numberOfCases : 64개)에 해당하는 수를 4진법으로 표현
+            for (int i = 0; i < cctvs.size(); i++) { // i가 해당 숫자의 4진법 각 자리를 가르킴
+                int dir = brute % 4; //4진법 각 자리가 방향을 가르킴
+                brute /= 4; //해당 수를 4진법으로 표현하기 위해
+                // (4진법 수)각 자리에 해당하는 방향(dir)으로 cctv종류(1 ~5)에 따라 감시영역을 7로 표시
+                // i번째 cctv의 좌표를 기준으로 cctv 종류를 파악해서 감시구역 표시
+                int x = cctvs.get(i).x;
+                int y = cctvs.get(i).y;
+                System.out.println("[x, y] : " + x + ", " + y + ", cctv : " + board[x][y]);
+                if (board[x][y] == 1) {
+                    upd(x, y, dir);
+                } else if (board[x][y] == 2) {
+                    upd(x, y, dir);
+                    upd(x, y,dir + 2);
+                } else if (board[x][y] == 3) {
+                    upd(x, y, dir);
+                    upd(x, y,dir + 1);
+                } else if (board[x][y] == 4) {
+                    upd(x, y, dir);
+                    upd(x, y,dir + 1);
+                    upd(x, y,dir + 2);
+                } else {
+                    upd(x, y, dir);
+                    upd(x, y,dir + 1);
+                    upd(x, y,dir + 2);
+                    upd(x, y,dir + 3);
                 }
-                blindArea += width;
+            }
+            int val = 0;
+            for (int i = 0; i < X; i++) {
+                for (int j = 0; j < Y; j++) {
+                    if (board2[i][j] == 0)
+                        val++;
+                }
+            }
+            blindArea =Math.min(blindArea, val);
+            // board2 출력
+            System.out.println("================================");
+            for (int i = 0; i < X; i++) {
+                for (int j = 0; j < Y; j++) {
+                    System.out.print(board2[i][j]);
+                }
+                System.out.println();
             }
         }
-        return blindArea;
+        System.out.println(blindArea);
     }
 
-    private static int[][] draw(int[][] board2, Cctv cctv, int dir) {
-        int[] ints = cctv.cctvArea[dir]; //바라보는 방향이 담겨있음
-
-        for (int i = 0; i < ints.length; i++) { //각 바라보는 방향별로 감시영역 그리기
-            int curX = cctv.location.x;
-            int curY = cctv.location.y;
-            while (true) {
-                int x = curX + dx[ints[i]];//바라보는 방향으로만 진행해나감
-                int y = curY + dy[ints[i]];
-                if (x < 0 || x >= X || y < 0 || y >= Y) //이 조건이 먼저 나와야함. 안그러면 잘못된 인덱스 접근
-                    break; //보드를 벗어나면 그리기 종료
-                if (board2[x][y] == 6) //벽을 만난경우, 해당방향 그리기 종료
-                    break;
-                if (board2[x][y] == 0) {
-                    board2[x][y] = 7; //감시영역 표시
-                }
-                curX = x;
-                curY = y;
-            }
+    // (x,y)에서 dir 방향으로 진행하면서 벽을 만날 때 까지 지나치는 모든 빈칸을 7로 바꿔버림
+    private static void upd(int x, int y, int dir) {
+        System.out.print("dir : " + dir + " -> ");
+        dir %= 4; //넘겨받은 dir은 0 ~ 6이 넘어올 수 있으므로 4방향으로 구분
+        System.out.println(dir);
+        while (true) {
+            x += dx[dir];
+            y += dy[dir];
+            if (OOB(x, y) || board2[x][y] == 6) return; // 범위를 벗어났거나 벽을 만나면 함수를 탈출
+            if(board2[x][y] != 0) continue; // 해당 칸이 빈칸이 아닐 경우(=cctv가 있을 경우) 넘어감
+            board2[x][y] = 7; // 빈칸을 7로 덮음
         }
-        return board2;
     }
 
-    private static boolean isCCTV(int p) {
-        return (1 <= p && p <= 5);
+    // Out of Bounds 확인
+    private static boolean OOB(int x, int y) {
+        return (x < 0 || x >= X || y < 0 || y >= Y);
     }
+
 }
