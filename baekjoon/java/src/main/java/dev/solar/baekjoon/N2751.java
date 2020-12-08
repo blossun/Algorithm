@@ -5,13 +5,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class N2751 {
+    public static int N;
     public static int[] arr;
+    public static int[] tmp;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
-        int N = Integer.parseInt(br.readLine());
+        N = Integer.parseInt(br.readLine());
         arr = new int[N];
+        tmp = new int[N];
         for (int i = 0; i < N; i++) {
             arr[i] = Integer.parseInt(br.readLine());
         }
@@ -33,7 +36,6 @@ public class N2751 {
     }
 
     private static void merge(int st, int en) {
-        int[] tmp = new int[arr.length];
         int mid = (st + en) / 2;
         int lidx = st;
         int ridx = mid;
@@ -45,8 +47,6 @@ public class N2751 {
             else tmp[i] = arr[ridx++];
         }
 
-        for (int i = st; i < en; i++) {
-            arr[i] = tmp[i];
-        }
+        System.arraycopy(tmp, st, arr, st, en - st);
     }
 }
