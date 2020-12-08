@@ -20,11 +20,11 @@ public class QuickSort {
 
     private void quickSort(int st, int en) {
         System.out.println("st : " + st + ", en : " + en);
-        if (st + 1 == en)
+        if (st + 1 >= en) //수열의 길이가 1 이하이면 함수 종료.(base condition)
             return ;
-        int pivotPos = quick(st, en);
-        quickSort(st, pivotPos);
-        quickSort(pivotPos, en);
+        int rPos = quick(st, en);
+        quickSort(st, rPos);
+        quickSort(rPos + 1, en);
     }
 
     private int quick(int st, int en) {
@@ -45,7 +45,7 @@ public class QuickSort {
                 ridx--;
             }
             System.out.println("lidx : " + lidx + ", ridx : " + ridx);
-            if (ridx < lidx) {
+            if (ridx < lidx) { // l과 r이 역전되는 그 즉시 탈출
                 arr[st] = arr[ridx];
                 arr[ridx] = pivot;
                 return ridx;
