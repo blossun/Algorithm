@@ -3,6 +3,7 @@ package dev.solar.baekjoon;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class N1149 {
@@ -26,31 +27,17 @@ public class N1149 {
         int[][] cost = new int[n][3];
 
         // 첫번째 집 비용 계산
-        for (int i = 0; i < 3; i++) { //색은 무조건 3가지 색생임!! n번 돌리는 것 아님
-            cost[0][i] = arr[0][i];
-        }
-//        for (int i = 0; i < n; i++) {
-//            System.out.println(cost[i][0] + ", " + cost[i][1] + ", " + cost[i][2]);
+        cost[0] = Arrays.copyOf(arr[0], arr.length);
+//        for (int i = 0; i < 3; i++) { //색은 무조건 3가지 색생임!! n번 돌리는 것 아님
+//            cost[0][i] = arr[0][i];
 //        }
-//        System.out.println("========================================");
         // 두번째 집부터 계산
         for (int i = 1; i < n; i++) {
-//            System.out.println("RGB : " + arr[i][0] + ", " + arr[i][1] + ", " + arr[i][2]);
             cost[i][0] = Math.min(cost[i - 1][1], cost[i - 1][2]) + arr[i][0]; //이번 R : 이전 (G,B)비용 중 최솟값
             cost[i][1] = Math.min(cost[i - 1][0], cost[i - 1][2]) + arr[i][1]; //이번 G : 이전 (R,B)비용 중 최솟값
             cost[i][2] = Math.min(cost[i - 1][0], cost[i - 1][1]) + arr[i][2]; //이번 B : 이전 (R,G)비용 중 최솟값
-
-
-//            System.out.println("======= i - 1 =============");
-//            System.out.println(cost[i - 1][0] + ", " + cost[i - 1][1] + ", " + cost[i - 1][2]);
-//            System.out.println("======= i  =============");
-//            System.out.println(cost[i][0] + ", " + cost[i][1] + ", " + cost[i][2]);
         }
 
-        //출력
-//        for (int i = 0; i < n; i++) {
-//            System.out.println(cost[i][0] + ", " + cost[i][1] + ", " + cost[i][2]);
-//        }
         int min = Math.min(cost[n - 1][0], cost[n - 1][1]);
         return Math.min(min, cost[n - 1][2]);
     }
