@@ -10,14 +10,14 @@ public class N1912 {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
-        int[] d = new int[N]; //각 인덱스를 시작값으로 해서 누적된 값만 저장
+        int[] d = new int[N]; //i 번째 항을 마지막으로 사용하는 수열의 합 중 최댓값
         StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-        for (int i = 0; i < N; i++) {
-            int num = Integer.parseInt(st.nextToken());
-            for (int j = 0; j < i + 1; j++) {
-                d[j] = d[j] + num;
-                mx = Math.max(mx, d[j]);
-            }
+        d[0] = Integer.parseInt(st.nextToken());
+        for (int i = 1; i < N; i++) {
+            d[i] = Math.max(0, d[i - 1]) + Integer.parseInt(st.nextToken()); //음수면 버리고 아니라면 합해서 저장
+        }
+        for (int i : d) {
+            mx = Math.max(mx, i);
         }
         System.out.println(mx);
     }
