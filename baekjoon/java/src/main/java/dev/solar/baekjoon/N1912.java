@@ -10,16 +10,13 @@ public class N1912 {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
-        int[][] d = new int[N][N];
-        int[] arr = new int[N];
+        int[] d = new int[N]; //각 인덱스를 시작값으로 해서 누적된 값만 저장
         StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-        arr[0] = Integer.parseInt(st.nextToken());
-        d[0][0] = arr[0];
-        for (int i = 1; i < N; i++) {
-            arr[i] = Integer.parseInt(st.nextToken());
-            for (int j = 0; j < i; j++) {
-                d[j][i] = d[j][i - 1] + arr[i];
-                mx = Math.max(mx, d[j][i]);
+        for (int i = 0; i < N; i++) {
+            int num = Integer.parseInt(st.nextToken());
+            for (int j = 0; j < i + 1; j++) {
+                d[j] = d[j] + num;
+                mx = Math.max(mx, d[j]);
             }
         }
         System.out.println(mx);
