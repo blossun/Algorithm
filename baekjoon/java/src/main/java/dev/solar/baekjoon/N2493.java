@@ -29,18 +29,19 @@ public class N2493 {
                     arr.push(tmp.pop());
                 }
             }
-            int topValue = arr.peek();
+            int topValue = arr.pop();
 //            System.out.println("number : " + number + ", topValue : " + topValue);
             if (number < topValue) {
                 count++;
-                sb.append(arr.size()).append(" ");
+                sb.append(arr.size() + 1).append(" ");
+                arr.push(topValue);
                 while (!tmp.empty()) { // 중간에 더 작았던 탑이 있다면
                     arr.push(tmp.pop()); //뺏던 값을 다시 넣어준다.
                 }
                 number = arr.pop();
 //                System.out.println(Arrays.toString(arr.toArray()));
             } else {
-                tmp.push(arr.pop());
+                tmp.push(topValue);
             }
         }
         System.out.println(sb.reverse());
