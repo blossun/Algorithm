@@ -9,51 +9,28 @@ public class N1100 {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
         int N = Integer.parseInt(br.readLine());
-        ClassTime[] classTimes = new ClassTime[N];
+        int[][] arr = new int[N][2];
         for (int i = 0; i < N; i++) {
-            String[] line = br.readLine().split(" ");
-            classTimes[i] = new ClassTime(Integer.parseInt(line[0]), Integer.parseInt(line[1]));
+            st = new StringTokenizer(br.readLine());
+            arr[i][0] = Integer.parseInt(st.nextToken());
+            arr[i][1] = Integer.parseInt(st.nextToken());
         }
 
-        Arrays.sort(classTimes, Comparator.comparingInt(o -> o.start));
-        List<Stack> classRooms = new LinkedList<>();
-        Stack<Integer> s = new Stack();
-        s.push(0);
-        classRooms.add(s);
-        for (ClassTime classTime : classTimes) {
-            boolean isSet = false;
-            Iterator<Stack> it = classRooms.iterator();
-            while (it.hasNext()) {
-                Stack st = it.next();
-                if (Integer.parseInt(String.valueOf(st.peek())) <= classTime.start) {
-                    st.add(classTime.end);
-                    isSet = true;
-                    break;
-                }
-            }
-            if (!isSet) {
-                Stack<Integer> st = new Stack();
-                st.push(classTime.end);
-                classRooms.add(st);
+        Arrays.sort(arr, Comparator.comparingInt(a -> a[0]));
+        PriorityQueue<Integer> queue = new PriorityQueue<>();
+        queue.offer(arr[0][1]); //첫번째 강의가 끝나는 시간
+        for (int i = 1; i < N; i++) {
+            if (queue.peek() <= arr[i][0]) { //이미 존재하는 강의실에 들어갈 수 있는 경우
+                queue.poll();
+                queue.offer(arr[i][1]);
+            } else { //들어갈 수 있는 강의실이 없는 경우
+                queue.offer(arr[i][1]);
             }
         }
-        System.out.println(classRooms.size());
+        System.out.println(queue.size());
 
     }
 
-    private static class ClassTime implements Comparable<ClassTime>{
-        public Integer start;
-        public Integer end;
-
-        public ClassTime(int start, int end) {
-            this.start = start;
-            this.end = end;
-        }
-
-        @Override
-        public int compareTo(ClassTime o) {
-            return o.start - this.start;
-        }
-    }
 }
