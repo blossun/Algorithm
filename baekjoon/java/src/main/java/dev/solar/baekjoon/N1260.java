@@ -3,74 +3,76 @@ package dev.solar.baekjoon;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class N1260 {
-    private static int[][] graph;
-    private static boolean[] visit;
-    private static int n, m, v;
-    private static StringBuilder sb = new StringBuilder();
+    private static int nodeCount, edgeCount;
+    private static LinkedList<Integer>[] nodeList;
+    private static StringBuilder dfsResult = new StringBuilder();
+    private static StringBuilder bfsResult = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        n = Integer.parseInt(st.nextToken()); //노드
-        m = Integer.parseInt(st.nextToken()); //간선
-        v = Integer.parseInt(st.nextToken()); //시작 노드
+        nodeCount = Integer.parseInt(st.nextToken()); //노드 개수
+        edgeCount = Integer.parseInt(st.nextToken()); //간선 개
+        int startNode = Integer.parseInt(st.nextToken()); //시작 노드
 
-        graph = new int[n + 1][n + 1];
-        visit = new boolean[n + 1];
-
-        while (m-- != 0) {
+        nodeList = new LinkedList[nodeCount + 1];
+        boolean[] bfsVisited = new boolean[nodeCount + 1];
+        boolean[] dfsVisited = new boolean[nodeCount + 1];
+        for (int i = 1; i < nodeCount + 1; i++) {
+            nodeList[i] = new LinkedList();
+        }
+        while (edgeCount-- != 0) {
             st = new StringTokenizer(br.readLine());
-            int src = Integer.parseInt(st.nextToken());
-            int dest = Integer.parseInt(st.nextToken());
-            graph[src][dest] = graph[dest][src] = 1;
+            int node1 = Integer.parseInt(st.nextToken());
+            int node2 = Integer.parseInt(st.nextToken());
+            nodeList[node1].add(node2);
+            nodeList[node2].add(node1);
+            // 리스트 정렬 - (문제 조건) 정점이 여러 개인 경우에는 정점 번호가 작은 것을 먼저 방문
+//            Collections.sort(nodeList[node1]);
+//            Collections.sort(nodeList[node2]);
         }
 
-        dfs(v);
-        System.out.println(sb);
-        
-        //초기화
-        Arrays.fill(visit, false);
-        sb.delete(0, sb.length());
+        // 리스트 정렬 - (문제 조건) 정점이 여러 개인 경우에는 정점 번호가 작은 것을 먼저 방문
+        for (int node = 1; node < nodeCount + 1; node++) {
+            Collections.sort(nodeList[node]);
+        }
 
-        bfs(v);
-        System.out.println(sb);
+        dfs(startNode, dfsVisited);
+        bfs(startNode, bfsVisited);
+        System.out.println(dfsResult);
+        System.out.println(bfsResult);
 
     }
 
-    private static void dfs(int v) {
-        visit[v] = true;
-        sb.append(v).append(" ");
-
-        for (int i = 1; i < n + 1; i++) {
-            if (graph[v][i] == 1 && !visit[i]) {
-                dfs(i);
-            }
-        }
-    }
-
-    private static void bfs(int v) {
+    private static void bfs(int currentNode, boolean[] bfsVisited) {
         Queue<Integer> queue = new LinkedList<>();
-
-        visit[v] = true;
-        queue.offer(v);
-        sb.append(v).append(" ");
-
+        queue.offer(currentNode);
         while (!queue.isEmpty()) {
-            int cur = queue.poll();
-            for (int i = 1; i < n + 1; i++) {
-                if (graph[cur][i] == 1 && !visit[i]) { //cur - i 에 간선이 있고, 방문하지 않은 곳이라면
-                    visit[i] = true; //방문했다는 표시를 남기고
-                    queue.offer(i); //다음 방문지점으로 대기
-                    sb.append(i).append(" ");
-                }
+            currentNode = queue.poll();
+            if (!bfsVisited[currentNode]) {
+                bfsVisited[currentNode] = true;
+                bfsResult.append(currentNode).append(" ");
+                queue.addAll(nodeList[currentNode]);
             }
         }
     }
+
+    private static void dfs(int currentNode, boolean[] dfsVisited) {
+        if (dfsVisited[currentNode]) { //방문했다면 skip
+            return;
+        }
+        dfsVisited[currentNode] = true;
+        dfsResult.append(currentNode).append(" ");
+        for (int nextNode : nodeList[currentNode]) {
+            dfs(nextNode, dfsVisited);
+        }
+    }
+
 }
