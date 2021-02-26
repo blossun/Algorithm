@@ -1,7 +1,7 @@
 ---
 name: "[LeetCode] 문제 풀이"
 about: LeetCode 문제 풀이
-title: 20.00.00 [LeetCode] 문제번호 문제
+title: 21.00.00 [LeetCode] 문제번호 문제
 labels: ''
 assignees: blossun
 
