@@ -30,4 +30,10 @@ class N42577Test {
         String[] strings = {"12","123","1235","567","88"};
         assertFalse(n42577.solution(strings));
     }
+
+    @Test
+    void test4() {
+        String[] strings = {"12345", "4567","456"};
+        assertFalse(n42577.solution(strings));
+    }
 }
