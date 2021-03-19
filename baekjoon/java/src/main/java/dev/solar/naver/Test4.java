@@ -11,10 +11,11 @@ public class Test4 {
             char currentChar = chars[i];
             if (beforeChar != currentChar) {
                 beforeChar = currentChar;
+                cost = C[i];
             } else {
-                totalCost += cost;
+                totalCost += Math.min(cost, C[i]);
+                cost = Math.max(cost, C[i]);
             }
-            cost = C[i];
         }
         return totalCost;
     }
