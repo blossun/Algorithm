@@ -49,4 +49,13 @@ class Test4Test {
         boolean[] expected = {false};
         assertArrayEquals(expected, test4.solution(program, flag_rules, commands));
     }
+
+    @Test
+    void test5() {
+        String program = "line";
+        String[] flag_rules = {"-s STRING", "-n NUMBER", "-e NULL"};
+        String[] commands = {"line -s -n"};
+        boolean[] expected = {false};
+        assertArrayEquals(expected, test4.solution(program, flag_rules, commands));
+    }
 }
