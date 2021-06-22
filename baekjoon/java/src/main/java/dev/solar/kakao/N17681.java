@@ -1,4 +1,4 @@
-package dev.solar.programmers;
+package dev.solar.kakao;
 
 public class N17681 {
     public String[] solution(int n, int[] arr1, int[] arr2) {

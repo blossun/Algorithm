@@ -1,4 +1,4 @@
-package dev.solar.programmers;
+package dev.solar.kakao;
 
 import org.junit.jupiter.api.Test;
 
