@@ -3,7 +3,6 @@ package dev.solar.baekjoon;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.math.BigInteger;
 import java.util.StringTokenizer;
 
 public class N6064 {
@@ -30,8 +29,8 @@ public class N6064 {
     public static int solution(int m, int n, int x, int y) {
         x = (m == x) ? 0 : x;
         y = (n == y) ? 0 : y;
-        for (int i = 1; i < lcm(m, n); i++) {
-            if (i % m == x && i % n == y) {
+        for (int i = x; i < m * n; i += m) {
+            if (i % n == y) {
                 return i;
             }
         }
@@ -39,16 +38,14 @@ public class N6064 {
     }
 
     // Recursive method to return gcd of a and b
-    public static int gcd(int a, int b)
-    {
+    public static int gcd(int a, int b) {
         if (a == 0)
             return b;
         return gcd(b % a, a);
     }
 
     // method to return LCM of two numbers
-    public static int lcm(int a, int b)
-    {
+    public static int lcm(int a, int b) {
         return (a / gcd(a, b)) * b;
     }
 }
