@@ -41,4 +41,19 @@ class SearchTest {
         System.out.println(index); //4
         assertTrue(Arrays.binarySearch(arr, 10) < 0);
     }
+
+    @Test
+    void case03() {
+        int[] arr = {1, 2, 3, 4, 5};
+        assertEquals(2, search.lower_index(arr, 3));
+        assertEquals(4, search.lower_index(arr, 5));
+        assertEquals(0, search.lower_index(arr, -1));
+    }
+
+    @Test
+    void case04() {
+        int[] arr = {1, 2, 3, 4, 5};
+        assertEquals(5, search.lower_index(arr, 7));
+        assertEquals(0, search.lower_index(arr, -1));
+    }
 }
