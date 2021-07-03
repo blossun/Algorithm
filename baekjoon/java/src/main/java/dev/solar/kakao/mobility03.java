@@ -11,6 +11,7 @@ public class Mobility03 {
         int[] lengthArray = new int[A.length]; //시작 위치(index)별 연속된 스위칭 길이 저장
         int endIndex = -1; //더 이상 비교를 진행하지 않아도 되는 lengthArray의 index - j
         boolean isEven = true;
+        int max = 1;
         // 첫번째 시작값 초기화
         evenArray[0] = A[0];
         lengthArray[0] = 1;
@@ -38,11 +39,11 @@ public class Mobility03 {
                     }
                 }
                 lengthArray[j]++;
+                max = Math.max(max, lengthArray[j]);
             }
         }
 
-        Arrays.stream(lengthArray).forEach(System.out::println);
-        return Arrays.stream(lengthArray).max().getAsInt();
-//        return 1;
+//        Arrays.stream(lengthArray).forEach(System.out::println);
+        return max;
     }
 }
