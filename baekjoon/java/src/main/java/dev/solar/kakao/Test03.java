@@ -16,12 +16,18 @@ public class Test03 {
         // boolean[] isEnded = new boolean[arrSize];
         int isTurned = -1;
         int isEnded = -1;
+        int max = 1;
+        int untilIndex = 1;
 
         // 처음 값 셋팅
         lengthArray[0] = 1;
         for (int i = 1; i < lengthArray.length; i++) {
             int curNumber = arr.get(i);
-            for (int j = isEnded + 1; j <= i; j++) { //lengthArray 시작위치
+            // 이미 max가 arr.size()/2 이상이면? 해당 인덱스(j) 이후로는 더 이상 비교할 필요가 없다.
+            if (max < arr.size()) {
+                untilIndex = i;
+            }
+            for (int j = isEnded + 1; j <= untilIndex; j++) { //lengthArray 시작위치
                 // if (isEnded[j]) { //이미 조건이 끝났으면 skip
                 // continue;
                 // }
@@ -36,10 +42,15 @@ public class Test03 {
                     isTurned = j;
                 }
                 lengthArray[j]++;
+                max = Math.max(max, lengthArray[j]);
+                if (max > arr.size() / 2) {
+                    untilIndex = j;
+                }
             }
         }
         Arrays.stream(lengthArray).forEach(System.out::println);
         // lengthArray에서 최댓값을 반환
-        return Arrays.stream(lengthArray).max().getAsInt();
+//        return Arrays.stream(lengthArray).max().getAsInt();
+        return max;
     }
 }
