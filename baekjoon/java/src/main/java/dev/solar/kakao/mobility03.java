@@ -12,6 +12,7 @@ public class Mobility03 {
         int endIndex = -1; //더 이상 비교를 진행하지 않아도 되는 lengthArray의 index - j
         boolean isEven = true;
         int max = 1;
+        int untilIndex = 1; //이 Index까지만 비교진행
         // 첫번째 시작값 초기화
         evenArray[0] = A[0];
         lengthArray[0] = 1;
@@ -26,7 +27,11 @@ public class Mobility03 {
                 oddArray[index] = curNumber;
                 oddArray[index - 1] = curNumber;
             }
-            for (int j = endIndex + 1; j <= index; j++) { //비교할 시작위치부터 i번째까지비교
+            //이미 max값이 A.length의 반 이상이라면 이후 Index는 확인할 필요값 없다.
+            if (max < A.length) {
+                untilIndex = index;
+            }
+            for (int j = endIndex + 1; j <= untilIndex; j++) { //비교할 시작위치부터 untilIndex번째까지비교
                 if (isEven) {
                     if (evenArray[j] != curNumber) {
                         endIndex = j;
@@ -40,6 +45,9 @@ public class Mobility03 {
                 }
                 lengthArray[j]++;
                 max = Math.max(max, lengthArray[j]);
+                if (max > A.length / 2) {
+                    untilIndex = j;
+                }
             }
         }
 
