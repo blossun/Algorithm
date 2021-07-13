@@ -2,6 +2,16 @@ package dev.solar.programmers;
 
 public class N12911 {
     public int solution(int n) {
+        int countOfOne = Integer.bitCount(n);
+        while (true) {
+            if (countOfOne == Integer.bitCount(++n)) {
+                break;
+            }
+        }
+        return n;
+    }
+
+    public int solution02(int n) {
         // 15 -> binary : 1111
         String binaryString = Integer.toBinaryString(n);
         char[] chars = new char[binaryString.length() + 1];
