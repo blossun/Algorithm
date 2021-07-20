@@ -24,7 +24,7 @@ public class Test03 {
         for (int i = 1; i < lengthArray.length; i++) {
             int curNumber = arr.get(i);
             // 이미 max가 arr.size()/2 이상이면? 해당 인덱스(j) 이후로는 더 이상 비교할 필요가 없다.
-            if (max < arr.size()) {
+            if (max < arr.size() / 2) {
                 untilIndex = i;
             }
             for (int j = isEnded + 1; j <= untilIndex; j++) { //lengthArray 시작위치
