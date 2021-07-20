@@ -6,13 +6,9 @@ public class QuickSort {
 
     public static void main(String[] args) {
         int[] arr = {15, 25, 22, 357, 16, 23, -53, 12, 46, 3};
-//        sort(arr);
         quickSort(arr, 0, arr.length - 1);
         System.out.println(Arrays.toString(arr));
-    }
 
-    public static void sort(int[] arr) {
-        quickSort(arr, 0, arr.length - 1);
     }
 
     private static void quickSort(int[] arr, int left, int right) {
