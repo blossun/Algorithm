@@ -31,6 +31,14 @@ class Webtoon02Test {
     }
 
     @Test
+    void case06() {
+        String s = "abcxaasdfasdfxyabc";
+        String[] expected = {"abc","xaasdfasdfxy","abc"};
+        String[] actual = webtoon02.solution(s);
+        assertArrayEquals(expected, actual);
+    }
+
+    @Test
     void case02() {
         String s = "zzzzz";
         String[] expected = {"z","z","z","z","z"};
