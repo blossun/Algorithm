@@ -2,6 +2,41 @@ package dev.solar.programmers;
 
 public class N12911 {
     public int solution(int n) {
+        int moveCount = 0; //전체 자리 이동 횟수
+        int countOfOne = 0; //1이 등장한 횟수
+        //1이 나올 때까지 우로 쉬프트
+        while (true) {
+            if ((n & 1) == 1) { //마지막 한자리를 확인해서 1이 나오면 stop
+                break;
+            }
+            n = n >> 1;
+            moveCount++;
+        }
+        //0이 나올 때까지 우로 쉬프트
+        while (true) {
+            if ((n & 1) == 0) { //0이 나오면 stop
+                break;
+            }
+            n = n >> 1;
+            countOfOne++;
+            moveCount++;
+        }
+        //0의 자리에 1을 대입, 1의 갯수 -1
+        //전체 자리 이동 횟수 만큼 좌로 쉬프트 -> 0으로 자릿수를 채워준다.
+        //단 countOfOne만큼 뒤에 1로 채워줘야 하기 때문에 1이 들어가야하는 위치 전까지만 0으로 채운다.
+        for (n++, countOfOne--; moveCount != countOfOne ; moveCount--) {
+            n = n << 1;
+        }
+        // countOfOne만큼 1로 뒷부분을 채워준다.
+        while (countOfOne > 0) {
+            n = n << 1;
+            n++;
+            countOfOne--;
+        }
+        return n;
+    }
+
+    public int solution03(int n) {
         int countOfOne = Integer.bitCount(n);
         while (true) {
             if (countOfOne == Integer.bitCount(++n)) {
