@@ -21,19 +21,7 @@ public class N1829 {
                     queue.offer(new Point(i, j));
                     numberOfArea++;
                     int curAreaNumber= picture[i][j]; //현재 영역의 숫자
-                    int sizeOfOneArea = 0;
-                    while (!queue.isEmpty()) {
-                        Point curPoint = queue.poll();
-                        for (int k = 0; k < 4; k++) {
-                            int x = curPoint.x + dx[k];
-                            int y = curPoint.y + dy[k];
-                            if (x < 0 || x >= m || y < 0 || y >= n) continue; //범위를 벗어났으면
-                            if (visited[x][y] || picture[x][y] == 0 || picture[x][y] != curAreaNumber) continue; //이미 방문했거나 0(색칠하지 않는 곳)인 경우
-                            queue.offer(new Point(x, y));
-                            visited[x][y] = true;
-                            sizeOfOneArea++;
-                        }
-                    }
+                    int sizeOfOneArea = getSizeOfOneArea(m, n, picture, queue, curAreaNumber);
                     maxSizeOfOneArea = Math.max(maxSizeOfOneArea, sizeOfOneArea);
                 }
             }
@@ -43,6 +31,23 @@ public class N1829 {
         answer[0] = numberOfArea;
         answer[1] = maxSizeOfOneArea;
         return answer;
+    }
+
+    private int getSizeOfOneArea(int m, int n, int[][] picture, Queue<Point> queue, int curAreaNumber) {
+        int sizeOfOneArea = 0;
+        while (!queue.isEmpty()) {
+            Point curPoint = queue.poll();
+            for (int k = 0; k < 4; k++) {
+                int x = curPoint.x + dx[k];
+                int y = curPoint.y + dy[k];
+                if (x < 0 || x >= m || y < 0 || y >= n) continue; //범위를 벗어났으면
+                if (visited[x][y] || picture[x][y] == 0 || picture[x][y] != curAreaNumber) continue; //이미 방문했거나 0(색칠하지 않는 곳)인 경우
+                queue.offer(new Point(x, y));
+                visited[x][y] = true;
+                sizeOfOneArea++;
+            }
+        }
+        return sizeOfOneArea;
     }
 
     class Point {
