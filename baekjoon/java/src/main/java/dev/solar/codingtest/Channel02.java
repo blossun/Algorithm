@@ -7,8 +7,8 @@ public class Channel02 {
     public int solution(String road, int n) {
         int result = 0;
         //확인할 시작위치를 큐에 담는다. (맨처음, 0과 0이 나온 다음 index들)
-        Queue<Integer> startIndexs = new LinkedList<>();
-        HashSet<Integer> startIndexSet = new HashSet<>();
+        Queue<Integer> startIndexs = new LinkedList<>(); //시작위치 저장
+        HashSet<Integer> startIndexSet = new HashSet<>(); //이미 시작위치로 지정했는지 확인하기 위한 용도
         startIndexs.offer(0);
         startIndexSet.add(0);
         for (int i = 0; i < road.length(); i++) {
