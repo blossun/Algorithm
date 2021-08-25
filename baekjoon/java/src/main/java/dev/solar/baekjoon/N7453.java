@@ -25,52 +25,45 @@ public class N7453 {
         int idx = 0;
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-//                AB[idx] = arr[0][i] + arr[1][j];
+                AB[idx] = arr[0][i] + arr[1][j];
                 CD[idx] = arr[2][i] + arr[3][j];
                 idx++;
             }
         }
 
+        Arrays.sort(AB);
         Arrays.sort(CD);
-        int answer = 0;
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                int number = arr[0][i] + arr[1][j];
-                int upper = upperBound(CD, -number);
-                int lower = lowerBound(CD, -number);
-                answer += (upper - lower);
+
+        long answer = 0;
+        int leftIndex = 0;
+        int rightIndex = size - 1;
+        while (leftIndex < size && rightIndex >= 0) {
+            int leftValue = AB[leftIndex];
+            int rightValue = CD[rightIndex];
+
+            int sum = leftValue + rightValue;
+            if (sum == 0) {
+                long leftCount = 0;// AB에 중복된 갯수
+                long rightCount = 0;// CD에 중복된 갯수
+
+                while (leftIndex < size && AB[leftIndex] == leftValue) {
+                    leftCount++;
+                    leftIndex++;
+                }
+
+                while (rightIndex >= 0 && CD[rightIndex] == rightValue) {
+                    rightCount++;
+                    rightIndex--;
+                }
+
+                answer += leftCount * rightCount; //경우의 수는 n * n
+            } else if (sum > 0) { //right의 값이 더 크다는 의미니깐
+                rightIndex--;
+            } else {
+                leftIndex++;
             }
         }
+
         System.out.println(answer);
-    }
-
-    public static int lowerBound(int[] arr, int target) {
-        int st = 0;
-        int en = arr.length;
-
-        while (st < en) {
-            int mid = (st + en) / 2;
-            if (arr[mid] < target) {
-                st = mid + 1;
-            } else if (arr[mid] >= target) {
-                en = mid;
-            }
-        }
-        return st;
-    }
-
-    public static int upperBound(int[] arr, int target) {
-        int st = 0;
-        int en = arr.length;
-
-        while (st < en) {
-            int mid = (st + en) / 2;
-            if (arr[mid] <= target) {
-                st = mid + 1;
-            } else if (arr[mid] > target) {
-                en = mid;
-            }
-        }
-        return st;
     }
 }
