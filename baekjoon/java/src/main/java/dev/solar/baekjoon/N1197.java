@@ -3,10 +3,7 @@ package dev.solar.baekjoon;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * 3 3
@@ -20,13 +17,9 @@ public class N1197 {
         StringTokenizer st = new StringTokenizer(br.readLine());
         int V = Integer.parseInt(st.nextToken());
         int E = Integer.parseInt(st.nextToken());
-        int[] parent = new int[V + 1]; //같은 그룹인지 확인
-        for (int i = 0; i < parent.length; i++) {
-            parent[i] = i; //자기 자신의 그룹에 속하도록 초기화
-        }
 
         // 비방향 연결 그래프
-        ArrayList<Node> graph = new ArrayList<>(E);
+        PriorityQueue<Node> graph = new PriorityQueue<>();
         for (int i = 0; i < E; i++) {
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
@@ -35,21 +28,30 @@ public class N1197 {
             graph.add(new Node(a, b, edge));
         }
 
-        // 간선 저장 - 가충치 오름차순 정렬 필요
-        Collections.sort(graph, Comparator.comparing(node -> node.cost));
+        int result = spanningKruskal(V, graph);
+        System.out.println(result);
+    }
+
+    private static int spanningKruskal(final int v, final PriorityQueue<Node> graph) {
+        // 그룹(부모)정보 저장 - 같은 그룹인지 확인용
+        int[] parent = new int[v + 1];
+        for (int i = 0; i < parent.length; i++) {
+            parent[i] = i; //자기 자신의 그룹에 속하도록 초기화
+        }
 
         int result = 0;
         int cnt = 0;
-        for (Node node : graph) {
+        while (!graph.isEmpty()) {
+            Node node = graph.poll();
             if(isEqualParent(parent, node.a, node.b)) {
                continue;
             }
             result += node.cost;
             cnt++;
             union(parent, node.a, node.b);
-            if (cnt == V - 1) break;
+            if (cnt == v - 1) break;
         }
-        System.out.println(result);
+        return result;
     }
 
     public static void union(int[] parent, int prev, int cur) {
@@ -75,7 +77,7 @@ public class N1197 {
         return parent[x] = getParent(parent, parent[x]);
     }
 
-    static class Node {
+    static class Node implements Comparable<Node> {
         int a;
         int b;
         int cost;
@@ -84,6 +86,11 @@ public class N1197 {
             this.a = a;
             this.b = b;
             this.cost = cost;
+        }
+
+        @Override
+        public int compareTo(final Node o) {
+            return cost - o.cost;
         }
     }
 }
