@@ -35,6 +35,7 @@ public class N1197 {
     private static int spanningKruskal(final int v, final PriorityQueue<Node> graph) {
         // 그룹(부모)정보 저장 - 같은 그룹인지 확인용
         int[] parent = new int[v + 1];
+        int[] rank = new int[v + 1];
         for (int i = 0; i < parent.length; i++) {
             parent[i] = i; //자기 자신의 그룹에 속하도록 초기화
         }
@@ -48,19 +49,22 @@ public class N1197 {
             }
             result += node.cost;
             cnt++;
-            union(parent, node.a, node.b);
+            union(parent, rank, node.a, node.b);
             if (cnt == v - 1) break;
         }
         return result;
     }
 
-    public static void union(int[] parent, int prev, int cur) {
+    public static void union(int[] parent, int[] rank, int prev, int cur) {
         int prevParent = getParent(parent, prev);
         int curParent = getParent(parent, cur);
-        if (prevParent <= curParent) {
+        if (rank[prevParent] > rank[curParent]) {
             parent[curParent] = prevParent;
         } else {
             parent[prevParent] = curParent;
+            if (rank[prevParent] == rank[curParent]) {
+                rank[curParent]++;
+            }
         }
     }
 
