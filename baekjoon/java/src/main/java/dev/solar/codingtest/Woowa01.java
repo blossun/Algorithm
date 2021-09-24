@@ -35,6 +35,22 @@ public class Woowa01 {
             return "IMPOSSIBLE";
         }
 
+        fillBoard(columns, board, needOneForU, needOneForL);
+
+        return printBoard(board);
+    }
+
+    private String printBoard(final int[][] board) {
+        StringBuilder sb = new StringBuilder();
+        for (int[] row : board) {
+            Arrays.stream(row).forEach(sb::append);
+            sb.append(',');
+        }
+        sb.deleteCharAt(sb.lastIndexOf(","));
+        return sb.toString();
+    }
+
+    private void fillBoard(final int columns, final int[][] board, int needOneForU, int needOneForL) {
         for (int i = 0; i < columns; i++) {
             if (needOneForU <= 0) {
                 break;
@@ -56,14 +72,5 @@ public class Woowa01 {
                 needOneForL--;
             }
         }
-
-        StringBuilder sb = new StringBuilder();
-        for (int[] row : board) {
-            Arrays.stream(row).forEach(sb::append);
-            sb.append(',');
-        }
-
-        System.out.println(sb.toString());
-        return sb.toString();
     }
 }
