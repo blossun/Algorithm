@@ -27,9 +27,18 @@ class N02Test {
 
     @Test
     void case03() {
-        int n = 999999;
+        int n = 0;
         int k = 3;
         int expected = 0;
+        int actual = n02.solution(n, k);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void case04() {
+        int n = 202002;
+        int k = 10;
+        int expected = 3;
         int actual = n02.solution(n, k);
         assertEquals(expected, actual);
     }
